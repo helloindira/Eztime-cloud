@@ -1,0 +1,717 @@
+from ctypes import addressof
+import email
+from sre_constants import SRE_FLAG_TEMPLATE
+# from sre_parse import State
+from statistics import mode
+from sys import dont_write_bytecode
+from types import CoroutineType
+from unicodedata import name
+from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.fields import CommaSeparatedIntegerField
+
+class CustomUser(models.Model):
+    user_created_by              = models.ForeignKey(User, on_delete=models.CASCADE,related_name='user_created_by', blank=True, null=True)
+    user_reporting_manager_ref   = models.ForeignKey(User, on_delete=models.CASCADE,related_name='user_reporting_manager_ref', blank=True, null=True)
+
+    u_unique_id                  = models.CharField(max_length=100, null=True, blank=True)
+    u_org_code                   = models.CharField(max_length=100, null=True, blank=True)
+    u_first_name                 = models.CharField(max_length=100, null=True, blank=True)
+    u_last_name                  = models.CharField(max_length=100, null=True, blank=True)
+    u_gender                     = models.CharField(max_length=100, null=True, blank=True)
+    u_marital_status             = models.CharField(max_length=100, null=True, blank=True)
+    u_designation                = models.CharField(max_length=100, null=True, blank=True)
+    u_date_of_joining            = models.CharField(max_length=100, null=True, blank=True)
+    u_profile_photo              = models.CharField(max_length=100, null=True, blank=True)
+    u_profile_path               = models.CharField(max_length=100, null=True, blank=True)
+    u_profile_base_url           = models.CharField(max_length=100, null=True, blank=True)
+    u_email                      = models.CharField(max_length=100, null=True, blank=True)
+    u_phone_no                   = models.CharField(max_length=100, null=True, blank=True)
+    u_password                   = models.CharField(max_length=100, null=True, blank=True)
+    u_status                     = models.CharField(max_length=100, null=True, blank=True)
+    u_c_timestamp                = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    u_m_timestamp                = models.DateTimeField(auto_now=True,verbose_name="Last_Update_TimeStamp",blank=True,null=True)
+    u_created_from               = models.CharField(max_length=100, null=True, blank=True)
+    u_reset_otp                  = models.CharField(max_length=100, null=True, blank=True)
+    u_last_login                 = models.CharField(max_length=100, null=True, blank=True)
+    u_login_token_key            = models.CharField(max_length=100, null=True, blank=True)
+    u_activation_status          = models.CharField(max_length=100, null=True, blank=True)
+    u_profile_updated_status     = models.CharField(max_length=100, null=True, blank=True)
+    u_activation_link_sent_count = models.CharField(max_length=100, null=True, blank=True)
+    u_activation_link            = models.CharField(max_length=100, null=True, blank=True)
+    u_acc_expiry_date            = models.CharField(max_length=100, null=True, blank=True)
+    u_is_first_user              = models.CharField(max_length=100, null=True, blank=True)
+    u_country                    = models.CharField(max_length=100, null=True, blank=True)
+    u_state                      = models.CharField(max_length=100, null=True, blank=True)
+    u_city                       = models.CharField(max_length=100, null=True, blank=True)
+    u_address                    = models.CharField(max_length=100, null=True, blank=True)
+    u_postal_code                = models.CharField(max_length=100, null=True, blank=True)
+    u_dob                        = models.CharField(max_length=100, null=True, blank=True)
+    u_screen_lock_status         = models.CharField(max_length=100, null=True, blank=True)
+
+class Organization(models.Model):
+    user_ref                         = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    org_qr_uniq_id                   = models.CharField(max_length=100, null=True, blank=True)
+    org_name                         = models.CharField(max_length=100, null=True, blank=True)
+    org_email                        = models.CharField(max_length=100, null=True, blank=True)
+    org_phone                        = models.CharField(max_length=100, null=True, blank=True)
+    org_mobile                       = models.CharField(max_length=100, null=True, blank=True)
+    org_fax                          = models.CharField(max_length=100, null=True, blank=True)
+    org_website                      = models.CharField(max_length=100, null=True, blank=True)
+    org_address                      = models.CharField(max_length=100, null=True, blank=True)
+    org_city                         = models.CharField(max_length=100, null=True, blank=True)
+    org_state                        = models.CharField(max_length=100, null=True, blank=True)
+    org_country                      = models.CharField(max_length=100, null=True, blank=True)
+    org_postal_code                  = models.CharField(max_length=100, null=True, blank=True)
+    org_profile_updated_status       = models.CharField(max_length=100, null=True, blank=True)
+    org_default_currency_type        = models.CharField(max_length=100, null=True, blank=True)
+    org_default_timezone             = models.CharField(max_length=100, null=True, blank=True)
+    org_status                       = models.CharField(max_length=100, null=True, blank=True)
+    org_subscription_plan            = models.CharField(max_length=100, null=True, blank=True)
+    org_logo                         = models.CharField(max_length=100, null=True, blank=True)
+    org_logo_path                    = models.CharField(max_length=100, null=True, blank=True)
+    base64                              = models.TextField(max_length=50000, null=True, blank=True)   
+    opg_c_timestamp                  = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    opg_m_timestamp                  = models.DateTimeField(auto_now=True,verbose_name="Last_Update_TimeStamp",blank=True,null=True)
+
+
+    conctact_person_designation   = models.CharField(max_length=100, null=True, blank=True)
+    conctact_person_name   = models.CharField(max_length=100, null=True, blank=True)
+    conctact_person_email   = models.CharField(max_length=100, null=True, blank=True)
+    conctact_person_phone_number   = models.CharField(max_length=100, null=True, blank=True)
+
+class TypeOfIndustries(models.Model):
+    org_ref         = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    toi_c_date                  = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    toi_m_dat                  = models.DateTimeField(auto_now=True,verbose_name="Last_Update_TimeStamp",blank=True,null=True)
+    toi_title       = models.CharField(max_length=100, null=True, blank=True)
+    toi_description = models.CharField(max_length=100, null=True, blank=True)
+    toi_status      = models.CharField(max_length=100, null=True, blank=True)
+    toi_type        = models.CharField(max_length=100, null=True, blank=True)
+    
+class Clients(models.Model):
+    org_ref                     = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    user_ref                    = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    toi_ref                     = models.ForeignKey(TypeOfIndustries, on_delete=models.CASCADE, blank=True, null=True)
+    c_name                      = models.CharField(max_length=100, null=True, blank=True)
+    c_code                      = models.CharField(max_length=100, null=True, blank=True)
+    c_address                   = models.CharField(max_length=100, null=True, blank=True)
+    c_type                      = models.CharField(max_length=100, null=True, blank=True)
+    c_contact_person            = models.CharField(max_length=100, null=True, blank=True)
+    c_contact_person_email_id   = models.CharField(max_length=100, null=True, blank=True)
+    c_contact_person_phone_no   = models.CharField(max_length=100, null=True, blank=True)
+    c_satus                     = models.CharField(max_length=100, null=True, blank=True)
+    c_c_timestamp               = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    c_m_timestamp               = models.DateTimeField(auto_now=True,verbose_name="Last_Update_TimeStamp",blank=True,null=True)
+    project  = models.CharField(max_length=100, null=True, blank=True)
+
+class OrgPeopleGroup(models.Model):
+    user_ref         = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    org_ref          = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    opg_group_name   = models.CharField(max_length=100, null=True, blank=True)
+    opg_status       = models.CharField(max_length=100, null=True, blank=True)
+    # opg_ref_org_id = models.CharField(max_length=100, null=True, blank=True)
+    opg_c_timestamp  = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    opg_m_timestamp  = models.DateTimeField(auto_now=True,verbose_name="Last_Update_TimeStamp",blank=True,null=True)
+
+class ProjectCategories(models.Model):
+    org_ref                     =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    pc_added_by_ref_user        =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    pc_name                     =  models.CharField(max_length=250, blank=True, null=True)
+    pc_status                   =  models.CharField(max_length=250, blank=True, null=True)
+    pc_c_date                   =  models.DateTimeField(auto_now_add=True,verbose_name="pc_c_date")
+    pc_m_date                   =  models.DateTimeField(auto_now_add=True,verbose_name="pc_m_date")
+
+    
+   
+    base64 =  models.TextField(max_length=250, blank=True, null=True)
+    file_attachment      = models.FileField(upload_to='file_attachment',max_length=250, blank=True, null=True)
+    file_attachment_path = models.CharField(max_length=250, blank=True, null=True)
+
+
+    file_attachment_name=  models.CharField(max_length=250, blank=True, null=True)
+    task_name=  models.CharField(max_length=250, blank=True, null=True)
+    billable_type=  models.CharField(max_length=250, blank=True, null=True)
+    
+
+class Projects(models.Model):
+    org_ref                         = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    user_ref                        = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='user_ref', blank=True, null=True)
+    c_ref                           = models.ForeignKey(Clients, on_delete=models.CASCADE, blank=True, null=True)
+    people_ref                      = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='people_ref', blank=True, null=True)
+    opg_ref                         = models.ForeignKey(OrgPeopleGroup, on_delete=models.CASCADE, blank=True, null=True)
+    reporting_manager_ref           = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='reporting_manager_ref', blank=True, null=True)
+    approve_manager_ref             = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='approve_manager_ref', blank=True, null=True)
+    pc_ref                          = models.ForeignKey(ProjectCategories, on_delete=models.CASCADE, blank=True, null=True)
+    p_description                   = models.CharField(max_length=250, blank=True, null=True)
+    p_code                          = models.CharField(max_length=250, blank=True, null=True)
+    p_name                          = models.CharField(max_length=250, blank=True, null=True)
+    p_people_type                   = models.CharField(max_length=250, blank=True, null=True)
+    p_start_date                    = models.CharField(max_length=250, blank=True, null=True)
+    p_closure_date                  = models.CharField(max_length=250, blank=True, null=True)
+    p_estimated_hours               = models.CharField(max_length=250, blank=True, null=True)
+    p_estimated_cost                = models.CharField(max_length=250, blank=True, null=True)
+    p_task_checklist_status         = models.CharField(max_length=250, blank=True, null=True)
+    p_status                        = models.CharField(max_length=250, blank=True, null=True)
+    p_activation_status             = models.CharField(max_length=250, blank=True, null=True)
+    p_c_date                        = models.DateTimeField(auto_now_add=True,verbose_name="p_c_date")
+    p_m_date                        = models.DateTimeField(auto_now_add=True,verbose_name="p_m_date")
+
+class TaskProjectCategories(models.Model):
+    pc_ref                              = models.ForeignKey(ProjectCategories , on_delete=models.CASCADE, blank=True, null=True)
+    p_ref                               = models.ForeignKey(Projects, on_delete=models.CASCADE, blank=True, null=True)
+    org_ref                             = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    tpc_added_by_ref_user               = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    tpc_name                            = models.CharField(max_length=50, blank=True, null=True)
+    tpc_status                          = models.CharField(max_length=50, blank=True, null=True)
+    tpc_c_date                          = models.DateTimeField(auto_now_add=True,verbose_name="tpc_c_date")
+    tpc_m_date                          = models.DateTimeField(auto_now_add=True,verbose_name="tpc_m_date")
+    file_attachment_path  =  models.CharField(max_length=250, blank=True, null=True)
+    file_attachment      =  models.CharField(max_length=250, blank=True, null=True)
+    base64=  models.TextField(max_length=50000, blank=True, null=True)
+    task_name=  models.CharField(max_length=250, blank=True, null=True)
+    billable_type =  models.CharField(max_length=250, blank=True, null=True)
+
+
+
+class   ProjectCategoriesFilesTemplates(models.Model):
+    org_ref                         = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    pcft_added_by_ref_user          = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    ref_pc                          = models.ForeignKey(ProjectCategories, on_delete=models.CASCADE, blank=True, null=True)
+    pcft_name                       = models.CharField(max_length=250, blank=True, null=True)
+    pcft_filename                   = models.CharField(max_length=250, blank=True, null=True)
+    pcft_file_path                  = models.FileField(upload_to='pcft_file_path',max_length=2500, blank=True, null=True)
+    pcft_file_base_url              = models.CharField(max_length=200)
+    pcft_status                     = models.CharField(max_length=250, blank=True, null=True)
+    pcft_c_date                     = models.DateTimeField(auto_now_add=True,verbose_name="pcft_c_date")
+    pcft_m_date                     = models.DateTimeField(auto_now_add=True,verbose_name="pcft_m_date")
+
+class ProjectStatusMainCategory(models.Model):
+    psmc_name                   =  models.CharField(max_length=250, blank=True, null=True)
+    psmc_status                 =  models.CharField(max_length=250, blank=True, null=True)
+    psmc_color_code             =  models.CharField(max_length=250, blank=True, null=True)
+    psmc_c_date                 =  models.DateTimeField(auto_now_add=True,verbose_name="psmc_c_date")
+    psmc_m_date                 =  models.DateTimeField(auto_now_add=True,verbose_name="psmc_m_date")
+
+    
+
+
+class ProjectHistory(models.Model):
+    p_ref                          =  models.ForeignKey(Projects, on_delete=models.CASCADE, blank=True, null=True)
+    org_ref                        =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    ph_people_ref_user             =  models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='ph_people_ref_user', blank=True, null=True)
+    ph_added_by_ref_user           =  models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='ph_added_by_ref_user', blank=True, null=True)
+    c_ref                          =  models.ForeignKey(Clients, on_delete=models.CASCADE, blank=True, null=True)
+    opg_ref                        =  models.ForeignKey(OrgPeopleGroup, on_delete=models.CASCADE, blank=True, null=True)
+    ph_reporting_manager_ref_user  =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='ph_reporting_manager_ref_user',blank=True, null=True)
+    ph_approve_manager_ref_user    =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='ph_approve_manager_ref_user',blank=True, null=True)
+    pc_ref                         =  models.ForeignKey(ProjectCategories, on_delete=models.CASCADE, blank=True, null=True)
+    ph_code                        =  models.CharField(max_length=250, blank=True, null=True)  
+    ph_name                        =  models.CharField(max_length=250, blank=True, null=True)
+    ph_people_type                 =  models.CharField(max_length=250, blank=True, null=True)
+    ph_description                 =  models.CharField(max_length=250, blank=True, null=True)
+    ph_start_date                  =  models.DateTimeField(auto_now_add=True,verbose_name="ph_start_date", blank=True, null=True)
+    ph_closure_date                =  models.DateTimeField(auto_now_add=True,verbose_name="ph_closure_date", blank=True, null=True)
+    ph_estimated_hours             =  models.DateTimeField(auto_now_add=True,verbose_name="ph_estimated_hours", blank=True, null=True)
+    ph_estimated_cost              =  models.CharField(max_length=250, blank=True, null=True)
+    ph_task_checklist_status       =  models.CharField(max_length=250, blank=True, null=True)
+    ph_status                      =  models.CharField(max_length=250, blank=True, null=True)
+    ph_activation_status           =  models.CharField(max_length=250, blank=True, null=True)
+    ph_c_date                      =  models.DateTimeField(max_length=250,auto_now_add=True,verbose_name="ph_c_date")
+    ph_m_date                      =  models.DateTimeField(max_length=250,auto_now_add=True,verbose_name="ph_m_date")
+
+class ProjectStatusSubCategory(models.Model):
+    psmc_ref                    =  models.ForeignKey(ProjectStatusMainCategory, on_delete=models.CASCADE, blank=True, null=True)           
+    org_ref                     =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    pssc_added_by_ref_user      =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    pssc_name                   =  models.CharField(max_length=250, blank=True, null=True)
+    pssc_status                 =  models.CharField(max_length=250, blank=True, null=True)
+    pssc_c_date                 =  models.DateTimeField(auto_now_add=True,verbose_name="pssc_c_date")
+    pssc_m_date                 =  models.DateTimeField(auto_now_add=True,verbose_name="pssc_m_date")
+    color = models.CharField(max_length=250, blank=True, null=True)
+
+class ProjectFiles(models.Model):
+    org_ref                     =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    pf_added_ref_user           =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    p_ref                       =  models.ForeignKey(Projects, on_delete=models.CASCADE, blank=True, null=True)
+    pf_filename                 =  models.CharField(max_length=250, blank=True, null=True)
+    pf_file_path                =  models.FileField(upload_to='pf_file_path',max_length=2500)
+    pf_base_url                 =  models.CharField(max_length=200)
+    pf_status                   =  models.CharField(max_length=250, blank=True, null=True)
+    pf_c_date                   =  models.DateTimeField(auto_now_add=True,verbose_name="pf_c_date")
+    pf_m_date                   =  models.DateTimeField(auto_now_add=True,verbose_name="pf_m_date")
+
+class GeoZones(models.Model):
+    gz_country_code             =  models.CharField(max_length=250, blank=True, null=True)
+    gz_zone_name                =  models.CharField(max_length=250, blank=True, null=True)
+
+class GeoTimezones(models.Model):
+    gz_ref                      =  models.ForeignKey(GeoZones, on_delete=models.CASCADE, blank=True, null=True)
+    gtm_abbreviation            =  models.CharField(max_length=250, blank=True, null=True)
+    gtm_time_start              =  models.DateTimeField(auto_now_add=True,verbose_name="gtm_time_start")
+    gtm_gmt_offset              =  models.CharField(max_length=250, blank=True, null=True)
+    gtm_dst                     =  models.CharField(max_length=250, blank=True, null=True)
+
+class GeoCurrencies(models.Model):
+    geo_cur_code                =  models.CharField(max_length=250, blank=True, null=True)
+    geo_cur_name                =  models.CharField(max_length=250, blank=True, null=True)
+    geo_cur_major_name          =  models.CharField(max_length=250, blank=True, null=True)
+    geo_cur_major_symbol        =  models.CharField(max_length=250, blank=True, null=True)
+    geo_cur_minor_name          =  models.CharField(max_length=250, blank=True, null=True)
+    geo_cur_minor_symbol        =  models.CharField(max_length=250, blank=True, null=True)
+    geo_cur_minor_value         =  models.CharField(max_length=250, blank=True, null=True)
+    geo_cur_c_date              =  models.DateTimeField(auto_now_add=True,verbose_name="geo_cur_c_date")
+    geo_cur_m_date              =  models.DateTimeField(auto_now_add=True,verbose_name="geo_cur_m_date")
+
+class GeoCountries(models.Model):
+    gcounty_name                =  models.CharField(max_length=250, blank=True, null=True)           
+    gcounty_cca2                =  models.CharField(max_length=250, blank=True, null=True)
+    gcounty_cca3                =  models.CharField(max_length=250, blank=True, null=True)
+    gcounty_ccn3                =  models.CharField(max_length=250, blank=True, null=True)
+    # gc_ref                      = models.ForeignKey(GeoCurrencies, on_delete=models.CASCADE, blank=True, null=True)
+    # gs_ref                      = models.ForeignKey(GeoStates, on_delete=models.CASCADE, blank=True, null=True)
+    gcounty_status              =  models.CharField(max_length=250, blank=True, null=True)
+    gcounty_c_date              =  models.DateTimeField(auto_now_add=True,verbose_name="gcounty_c_date")
+    gcounty_m_date              =  models.DateTimeField(auto_now_add=True,verbose_name="gcounty_m_date")
+
+class GeoStates(models.Model):
+    gcountry_ref                =  models.ForeignKey(GeoCountries, on_delete=models.CASCADE, blank=True, null=True)
+    gstate_name                 =  models.CharField(max_length=250, blank=True, null=True)
+    gstate_hasc                 =  models.CharField(max_length=250, blank=True, null=True)
+    gstate_c_date               =  models.DateTimeField(auto_now_add=True,verbose_name="gstate_c_date")
+    gstate_m_date               =  models.DateTimeField(auto_now_add=True,verbose_name="gstate_m_date")
+
+class GeoCities(models.Model):
+    ref_gcounty                 = models.ForeignKey(GeoCountries, on_delete=models.CASCADE, blank=True, null=True)       
+    gstate_ref                  = models.ForeignKey(GeoStates, on_delete=models.CASCADE, blank=True, null=True)
+    zone_ref                    = models.ForeignKey(GeoZones, on_delete=models.CASCADE, blank=True, null=True)
+    gcity_name                  = models.CharField(max_length=250, blank=True, null=True) 
+    gcity_latitude              = models.CharField(max_length=250, blank=True, null=True)
+    gcity_longitude             = models.CharField(max_length=250, blank=True, null=True)
+    gcity_c_date                = models.DateTimeField(auto_now_add=True,verbose_name="gcity_c_date")
+    gcity_m_date                = models.DateTimeField(auto_now_add=True,verbose_name="gcity_m_date")
+
+class GeoCountriesCurrencies(models.Model):
+    gcounty_ref   = models.ForeignKey(GeoCountries, on_delete=models.CASCADE, blank=True, null=True) 
+    geo_cur_ref   = models.ForeignKey(GeoCurrencies, on_delete=models.CASCADE, blank=True, null=True) 
+
+class GeoContinents(models.Model):
+    gc_name                 =  models.CharField(max_length=250, blank=True, null=True)
+    gc_c_date               =  models.DateTimeField(auto_now_add=True,verbose_name="gstate_c_date")
+    gc_m_date               =  models.DateTimeField(auto_now_add=True,verbose_name="gstate_c_date")
+
+class GeoSubContinents(models.Model):
+    gsc_name                =  models.CharField(max_length=250, blank=True, null=True)
+    gc_ref                  =  models.ForeignKey(GeoCurrencies, on_delete=models.CASCADE, blank=True, null=True) 
+    gsc_c_date              =  models.DateTimeField(auto_now_add=True,verbose_name="gstate_c_date")
+    gsc_m_date              =  models.DateTimeField(auto_now_add=True,verbose_name="gstate_c_date")
+
+class OrganizationDepartment(models.Model):
+    org_ref                 =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    od_added_by_ref_user    =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    od_name                 =  models.CharField(max_length=250, blank=True, null=True)
+    od_status               =  models.CharField(max_length=250, blank=True, null=True)
+    od_c_date               =  models.DateTimeField(auto_now_add=True,verbose_name="od_c_date")
+    od_m_date               =  models.DateTimeField(auto_now_add=True,verbose_name="od_m_date")
+
+class OrganizationCostCenters(models.Model):
+    org_ref                 =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    occ_added_by_ref_user   =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    occ_cost_center_name    =  models.CharField(max_length=250, blank=True, null=True)
+    occ_leave_mgmt_status   =  models.CharField(max_length=250, blank=True, null=True)
+    occ_currency_type       =  models.CharField(max_length=250, blank=True, null=True)
+    occ_status              =  models.CharField(max_length=250, blank=True, null=True)
+    occ_c_date              =  models.DateTimeField(auto_now_add=True,verbose_name="occ_c_date")
+    occ_m_date              =  models.DateTimeField(auto_now_add=True,verbose_name="occ_m_date")
+
+class ClientsDms(models.Model):
+    ref_org                 =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    cdms_added_ref_user     =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    c_ref                   =  models.ForeignKey(Clients, on_delete=models.CASCADE, blank=True, null=True)
+    cdms_filename           =  models.CharField(max_length=250, blank=True, null=True)    
+    cdms_file_path          =  models.CharField(max_length=250, blank=True, null=True)
+    cdms_base_url           =  models.CharField(max_length=250, blank=True, null=True)
+    cdms_file_ref_name      =  models.CharField(max_length=250, blank=True, null=True)
+    cdms_status             =  models.CharField(max_length=250, blank=True, null=True)
+    cdms_c_date             =  models.DateTimeField(auto_now_add=True,verbose_name="cdms_c_date")    
+    cdms_m_date             =  models.DateTimeField(auto_now_add=True,verbose_name="cdms_m_date")
+
+
+class ClientsOtherContactDetails(models.Model):
+    c_ref                       =  models.ForeignKey(Clients, on_delete=models.CASCADE, blank=True, null=True)
+    org_ref                     =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    cocd_added_by_ref_user      =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    cocd_name                   =  models.CharField(max_length=250, blank=True, null=True)
+    cocd_phone                  =  models.CharField(max_length=250, blank=True, null=True)
+    cocd_email                  =  models.CharField(max_length=250, blank=True, null=True)
+    cocd_satus                  =  models.CharField(max_length=250, blank=True, null=True)       
+    cocd_c_date                 =  models.DateTimeField(auto_now_add=True,verbose_name="cocd_c_date")  
+    cocd_m_date                 =  models.DateTimeField(auto_now_add=True,verbose_name="cocd_m_date")
+
+class OrganizationRoles(models.Model):
+    org_ref                     =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    or_added_by_ref_user        =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    or_name                     =  models.CharField(max_length=250, blank=True, null=True)
+    or_description              =  models.CharField(max_length=250, blank=True, null=True)  
+    or_priority                 =  models.CharField(max_length=250, blank=True, null=True)
+    or_status                   =  models.CharField(max_length=250, blank=True, null=True)
+    or_type                     =  models.CharField(max_length=250, blank=True, null=True)
+    or_permission               =  models.CharField(max_length=250, blank=True, null=True)
+    or_c_date                   =  models.CharField(max_length=250, blank=True, null=True)
+    or_m_date                   =  models.CharField(max_length=250, blank=True, null=True)
+
+    
+#------------------------------------
+
+class ProductDetails(models.Model):
+    pd_app_name=  models.CharField(max_length=250, blank=True, null=True)
+    pd_app_tag_line=  models.CharField(max_length=250, blank=True, null=True)
+    pd_company_name=  models.CharField(max_length=250, blank=True, null=True)
+    pd_company_address=  models.CharField(max_length=250, blank=True, null=True)
+    pd_company_email_id=  models.CharField(max_length=250, blank=True, null=True)
+    pd_company_phone_no=  models.CharField(max_length=250, blank=True, null=True)
+    pd_web_version=  models.CharField(max_length=250, blank=True, null=True)
+    pd_poweredbyweblink=  models.CharField(max_length=250, blank=True, null=True)
+    pd_facebook_link=  models.CharField(max_length=250, blank=True, null=True)
+    pd_twitter_link=  models.CharField(max_length=250, blank=True, null=True)
+    pd_linkedin_link=  models.CharField(max_length=250, blank=True, null=True)
+    pd_product_logo=  models.CharField(max_length=250, blank=True, null=True)
+    pd_product_logo_base_url=  models.CharField(max_length=250, blank=True, null=True)
+    pd_product_logo_path=  models.CharField(max_length=250, blank=True, null=True)
+    pd_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="cocd_c_date")
+    pd_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="cocd_c_date")
+    pd_status=  models.CharField(max_length=250, blank=True, null=True)
+
+class  OrganizationLeaveType(models.Model):
+    org_reff=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    olt_added_by_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+
+    #do check this id
+    olt_ref_occ_id_list=  models.CharField(max_length=250, blank=True, null=True)
+    olt_name=  models.CharField(max_length=250, blank=True, null=True)
+    olt_description=  models.CharField(max_length=250, blank=True, null=True)
+    olt_status=  models.CharField(max_length=250, blank=True, null=True)
+    olt_no_of_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    olt_no_of_leaves_yearly=  models.CharField(max_length=250, blank=True, null=True)
+    olt_no_of_leaves_monthly=  models.CharField(max_length=250, blank=True, null=True)
+    olt_accrude_monthly_status=  models.CharField(max_length=250, blank=True, null=True)
+    olt_carry_forward=  models.CharField(max_length=250, blank=True, null=True)
+    olt_applicable_for=  models.CharField(max_length=250, blank=True, null=True)
+    olt_people_applicable_for=  models.CharField(max_length=250, blank=True, null=True)
+    olt_gracefull_status=  models.CharField(max_length=250, blank=True, null=True)
+    olt_gracefull_days=  models.CharField(max_length=250, blank=True, null=True)
+    olt_enchashment_status=  models.CharField(max_length=250, blank=True, null=True)
+    olt_max_enchashment_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    olt_editable=  models.CharField(max_length=250, blank=True, null=True)
+    olt_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="olt_c_date")
+    olt_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="olt_m_date")
+
+class OrganizationCostCenters(models.Model):
+    org_ref=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    occ_added_by_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    occ_cost_center_name=  models.CharField(max_length=250, blank=True, null=True)
+    occ_leave_mgmt_status=  models.CharField(max_length=250, blank=True, null=True)
+    occ_currency_type=  models.CharField(max_length=250, blank=True, null=True)
+    occ_status=  models.CharField(max_length=250, blank=True, null=True)
+    occ_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="occ_c_date")
+    occ_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="occ_m_date")
+
+class OrganizationCostCentersLeaveType(models.Model):
+    olt_ref=  models.ForeignKey(OrganizationLeaveType, on_delete=models.CASCADE, blank=True, null=True)
+    org_ref=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    occ_ref=  models.ForeignKey(OrganizationCostCenters, on_delete=models.CASCADE, blank=True, null=True)
+    occl_added_by_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True,related_name='occl_added_by_ref_user')
+    occl_name=  models.CharField(max_length=250, blank=True, null=True)
+    occl_description=  models.CharField(max_length=250, blank=True, null=True)
+    occl_status=  models.CharField(max_length=250, blank=True, null=True)
+    occl_alloted_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    occl_alloted_leaves_yearly=  models.CharField(max_length=250, blank=True, null=True)
+    occl_alloted_leaves_monthly=  models.CharField(max_length=250, blank=True, null=True)
+    occl_accrude_monthly_status=  models.CharField(max_length=250, blank=True, null=True)
+    occl_carry_forward=  models.CharField(max_length=250, blank=True, null=True)
+    occl_gracefull_status=  models.CharField(max_length=250, blank=True, null=True)
+    occl_gracefull_days=  models.CharField(max_length=250, blank=True, null=True)
+    occl_enchashment_status=  models.CharField(max_length=250, blank=True, null=True)
+    occl_max_enchashment_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    occl_editable=  models.CharField(max_length=250, blank=True, null=True)
+    occl_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="occ_c_date")
+    occl_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="occ_c_date")
+
+class OrganizationCostCentersYearList(models.Model):
+    org_ref=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    occyl_added_by_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    occ_ref=  models.ForeignKey(OrganizationCostCenters, on_delete=models.CASCADE, blank=True, null=True)
+    occyl_year_start_date=  models.DateTimeField(auto_now_add=True,verbose_name="occyl_year_start_date")
+    occyl_year_end_date=  models.DateTimeField(auto_now_add=True,verbose_name="occyl_year_end_date")
+    occyl_status=  models.CharField(max_length=250, blank=True, null=True)
+    occyl_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="occyl_c_date")
+    occyl_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="occyl_m_date")
+
+class UsersLeaveMaster(models.Model):
+    org_ref=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    ulm_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    occ_ref=  models.ForeignKey(OrganizationCostCenters, on_delete=models.CASCADE, blank=True, null=True)
+    occl_ref=  models.ForeignKey(OrganizationLeaveType, on_delete=models.CASCADE, blank=True, null=True)
+    occyl_ref=  models.ForeignKey(OrganizationCostCentersYearList, on_delete=models.CASCADE, blank=True, null=True)
+
+    #do check this id
+    ulm_added_by_ref_id=  models.CharField(max_length=250, blank=True, null=True)
+    ulm_allotted_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    ulm_leaves_used=  models.CharField(max_length=250, blank=True, null=True)
+    ulm_expiry_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulm_expiry_date")
+    ulm_status=  models.CharField(max_length=250, blank=True, null=True)
+    ulm_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulm_c_date")
+    ulm_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulm_m_date")
+
+class UsersLeaveApplications(models.Model):
+
+    org_ref=  models.ForeignKey(OrganizationLeaveType, on_delete=models.CASCADE, blank=True, null=True)
+    ula_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    occl_ref=  models.ForeignKey(OrganizationCostCentersLeaveType, on_delete=models.CASCADE, blank=True, null=True)
+    ulm_ref=  models.ForeignKey(UsersLeaveMaster, on_delete=models.CASCADE, blank=True, null=True)
+    #do check this  twi fields
+    ula_approved_by_ref_u_id=  models.CharField(max_length=250, blank=True, null=True)
+    ula_cc_to_ref_u_id=  models.CharField(max_length=250, blank=True, null=True)
+    ula_approved_date=  models.DateTimeField(auto_now_add=True,verbose_name="ula_approved_date")
+    ula_reason_for_leave=  models.CharField(max_length=250, blank=True, null=True)
+    ula_contact_details=  models.CharField(max_length=250, blank=True, null=True)
+    ula_file=  models.CharField(max_length=250, blank=True, null=True)
+    ula_file_path=  models.CharField(max_length=250, blank=True, null=True)
+    ula_file_base_url=  models.CharField(max_length=250, blank=True, null=True)
+    ula_cc_mail_sent=  models.CharField(max_length=250, blank=True, null=True)
+    ula_from_date=  models.DateTimeField(auto_now_add=True,verbose_name="ula_from_date")
+    ula_to_date=  models.DateTimeField(auto_now_add=True,verbose_name="ula_to_date")
+    ula_from_session=  models.CharField(max_length=250, blank=True, null=True)
+    ula_to_session=  models.CharField(max_length=250, blank=True, null=True)
+    ula_no_of_days_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    ula_approved_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    ula_rejected_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    ula_pending_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    ula_balanced_leaves=  models.CharField(max_length=250, blank=True, null=True)
+
+class UserLeaveAllotmentList(models.Model):
+
+    org_ref=  models.ForeignKey(OrganizationLeaveType, on_delete=models.CASCADE, blank=True, null=True)
+    occ_ref=  models.ForeignKey(OrganizationCostCenters, on_delete=models.CASCADE, blank=True, null=True)
+    occyl_ref=  models.ForeignKey(OrganizationCostCentersYearList, on_delete=models.CASCADE, blank=True, null=True)
+    occl_ref=  models.ForeignKey(OrganizationCostCentersLeaveType, on_delete=models.CASCADE, blank=True, null=True)
+    ulm_ref=  models.ForeignKey(UsersLeaveMaster, on_delete=models.CASCADE, blank=True, null=True)
+    ulal_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    ula_ref=  models.ForeignKey(UsersLeaveApplications, on_delete=models.CASCADE, blank=True, null=True)
+    ulal_allotted_leaves=  models.CharField(max_length=250, blank=True, null=True)
+
+    ulal_from_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulal_from_date")
+    ulal_to_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulal_to_date")
+    ulal_expiry_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulal_expiry_date")
+    ulal_status=  models.CharField(max_length=250, blank=True, null=True)
+
+    ulal_type=  models.CharField(max_length=250, blank=True, null=True)
+
+    ulal_type_of_allotment=  models.CharField(max_length=250, blank=True, null=True)
+
+    ulal_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulal_c_date")
+    ulal_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulal_m_date")
+
+class UserLeaveList(models.Model):
+    org_ref=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    ull_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    olt_ref=  models.ForeignKey(OrganizationLeaveType, on_delete=models.CASCADE, blank=True, null=True)
+    occ_ref=  models.ForeignKey(OrganizationCostCenters, on_delete=models.CASCADE, blank=True, null=True)
+
+    #do check this id
+    ull_added_by_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='ull_added_by_ref_user',blank=True, null=True)
+
+     #do check this id
+    ull_ref_ohcy_id=  models.CharField(max_length=250, blank=True, null=True)
+    ull_no_of_allotted_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    ull_no_of_leaves_used=  models.CharField(max_length=250, blank=True, null=True)
+    ull_status=  models.CharField(max_length=250, blank=True, null=True)
+    ull_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="ull_c_date")
+    ull_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="ull_m_date")
+
+class  ProjectCategoriesChecklist(models.Model):
+    org_ref =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True,related_name='org_ref')
+    pcc_added_by_ref_user =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    pc_ref=  models.ForeignKey(ProjectCategories, on_delete=models.CASCADE, blank=True, null=True,related_name='pc_ref')
+    
+    pcc_name=  models.CharField(max_length=250, blank=True, null=True)
+    pcc_billable=  models.CharField(max_length=250, blank=True, null=True)
+    pcc_status=  models.CharField(max_length=250, blank=True, null=True)
+    pcc_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="ull_m_date")
+    pcc_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="ull_m_date")
+
+class TaskProjectCategoriesChecklist(models.Model):
+    p_ref=  models.ForeignKey(Projects, on_delete=models.CASCADE, blank=True, null=True)
+    org_ref=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    tpcc_added_by_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    pc_ref=  models.ForeignKey(ProjectCategories, on_delete=models.CASCADE, blank=True, null=True)
+    pcc_ref=  models.ForeignKey(ProjectCategoriesChecklist, on_delete=models.CASCADE, blank=True, null=True)
+    opg_ref=  models.ForeignKey(OrgPeopleGroup, on_delete=models.CASCADE, blank=True, null=True)
+    
+    tpcc_name=  models.CharField(max_length=250, blank=True, null=True)
+    tpcc_status=  models.CharField(max_length=250, blank=True, null=True)
+    tpcc_billable=  models.CharField(max_length=250, blank=True, null=True)
+    
+
+    #do check this id
+    tpcc_assignee_people_ref_u_id=  models.CharField(max_length=250, blank=True, null=True)
+    tpcc_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="tpcc_c_date")
+    tpcc_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="tpcc_m_date")
+
+
+class TimesheetMaster(models.Model):
+    tm_timesheet_date=  models.DateTimeField(auto_now_add=True,verbose_name="tm_timesheet_date")
+
+    tm_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='tm_ref_user', blank=True, null=True)
+    ula_ref=  models.ForeignKey(UsersLeaveApplications, on_delete=models.CASCADE, blank=True, null=True)
+    org_ref=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    tm_approver_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='tm_approver_ref_user',  blank=True, null=True)
+    
+    tm_approved_date=  models.DateTimeField(auto_now_add=True,verbose_name="tm_approved_date")
+    tm_status=  models.CharField(max_length=250, blank=True, null=True)
+    tm_leave_holiday_conflict=  models.CharField(max_length=250, blank=True, null=True)
+    tm_auto_approved=  models.CharField(max_length=250, blank=True, null=True)
+    tm_deadline_status=  models.CharField(max_length=250, blank=True, null=True)
+    tm_deadline_date=  models.DateTimeField(auto_now_add=True,verbose_name="tm_deadline_date")
+
+    tm_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="tm_c_date")
+ 
+    tm_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="tm_m_date")
+
+class TimesheetMasterDetails(models.Model):
+    tmd_timesheet_date=  models.DateTimeField(auto_now_add=True,verbose_name="tmd_timesheet_date")
+    tmd_ref_tm=  models.ForeignKey(TimesheetMaster, on_delete=models.CASCADE, blank=True, null=True)
+    tmd_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='tmd_ref_user', blank=True, null=True)
+    org_ref=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    c_ref=  models.ForeignKey(Clients, on_delete=models.CASCADE, blank=True, null=True)
+    p_ref=  models.ForeignKey(Projects, on_delete=models.CASCADE, blank=True, null=True)
+    tpcc_ref=  models.ForeignKey(TaskProjectCategoriesChecklist, on_delete=models.CASCADE, blank=True, null=True)
+    ula_ref=  models.ForeignKey(UsersLeaveApplications, on_delete=models.CASCADE, blank=True, null=True)
+    tmd_approver_ref_user =  models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='tmd_approver_ref_user', blank=True, null=True)
+    
+    tmd_timer_status=  models.CharField(max_length=250, blank=True, null=True)
+    tmd_start_time=  models.DateTimeField(auto_now_add=True,verbose_name="tmd_start_time")
+    tmd_description=  models.CharField(max_length=250, blank=True, null=True)
+    tmd_status=  models.CharField(max_length=250, blank=True, null=True)
+    tmd_approved_date=  models.DateTimeField(auto_now_add=True,verbose_name="tmd_approved_date")
+    tmd_halfday_status=  models.CharField(max_length=250, blank=True, null=True)
+    tmd_leave_holiday_conflict=  models.CharField(max_length=250, blank=True, null=True)
+    tmd_auto_approved=  models.CharField(max_length=250, blank=True, null=True)
+    tmd_deadline_status=  models.CharField(max_length=250, blank=True, null=True)
+    tmd_deadline_date=  models.DateTimeField(auto_now_add=True,verbose_name="tmd_deadline_date")
+    tmd_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="tmd_c_date")
+    tmd_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="tmd_m_date")
+
+
+class PrefixSuffix(models.Model):
+    prefix=  models.CharField(max_length=250, blank=True, null=True)
+    suffix =  models.CharField(max_length=250, blank=True, null=True)
+    prefixsuffix_status =  models.CharField(max_length=250, blank=True, null=True)
+    added_date =  models.DateTimeField(auto_now_add=True,verbose_name="added_date")
+
+
+class Center(models.Model):
+    center_name  =  models.CharField(max_length=250, blank=True, null=True)
+    year_start_date=  models.CharField(max_length=250, blank=True, null=True)
+    year_end_date=  models.CharField(max_length=250, blank=True, null=True)
+    center_status =  models.CharField(max_length=250, blank=True, null=True)
+
+
+
+class People(models.Model):
+    prefix_suffix  =  models.ForeignKey(PrefixSuffix, on_delete=models.CASCADE, blank=True, null=True)
+    department =  models.ForeignKey(OrganizationDepartment, on_delete=models.CASCADE, blank=True, null=True)
+    role  =  models.ForeignKey(OrganizationRoles, on_delete=models.CASCADE, blank=True, null=True)
+    cost_center=  models.ForeignKey(OrganizationCostCenters, on_delete=models.CASCADE, blank=True, null=True)
+    reporting_manager =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    first_name =  models.CharField(max_length=250, blank=True, null=True)
+    last_name=  models.CharField(max_length=250, blank=True, null=True)
+    email_id=  models.CharField(max_length=250, blank=True, null=True)
+    marital_status=  models.CharField(max_length=250, blank=True, null=True)
+    gender=  models.CharField(max_length=250, blank=True, null=True)
+    designation=  models.CharField(max_length=250, blank=True, null=True)
+    tags=  models.CharField(max_length=250, blank=True, null=True)
+    date_of_joining=  models.CharField(max_length=250, blank=True, null=True)
+    people_status=  models.CharField(max_length=250, blank=True, null=True)
+
+    base64 =  models.TextField(max_length=50000, blank=True, null=True)
+    photo    =  models.CharField(max_length=3000, blank=True, null=True)
+    photo_path = models.CharField(max_length=2000, blank=True, null=True)
+
+
+
+class Tag(models.Model):
+    tag_name  =  models.CharField(max_length=250, blank=True, null=True)
+    added_date =  models.DateTimeField(auto_now_add=True,verbose_name="added_date")
+    tage_status   =  models.CharField(max_length=250, blank=True, null=True)
+
+
+class TimeSheet(models.Model):
+    client =  models.ForeignKey(Clients, on_delete=models.CASCADE, blank=True, null=True)
+    project=  models.ForeignKey(Projects, on_delete=models.CASCADE, blank=True, null=True)
+    task=  models.ForeignKey(TaskProjectCategories, on_delete=models.CASCADE, blank=True, null=True)
+    time_spent=  models.CharField(max_length=250, blank=True, null=True)
+    description=  models.CharField(max_length=250, blank=True, null=True)
+    timesheet_status=  models.CharField(max_length=250, blank=True, null=True)
+    timesheet_date_timestamp=  models.CharField(max_length=250, blank=True, null=True)
+
+class MasterLeaveTypes(models.Model):
+    leave_title=  models.CharField(max_length=250, blank=True, null=True)
+
+    leave_type=  models.CharField(max_length=250, blank=True, null=True)
+
+    no_of_leaves=  models.CharField(max_length=250, blank=True, null=True)
+
+    carry_forward_per=  models.CharField(max_length=250, blank=True, null=True)
+
+    gracefull_days=  models.CharField(max_length=250, blank=True, null=True)
+
+    encashment     = models.BooleanField(default=False, blank=True, null=True)
+    max_encashments=  models.CharField(max_length=250, blank=True, null=True)
+
+    action=  models.CharField(max_length=250, blank=True, null=True)
+
+    description=  models.CharField(max_length=250, blank=True, null=True)
+
+    accrude_monthly   = models.BooleanField(default=False, blank=True, null=True)
+    yearly_leaves=  models.CharField(max_length=250, blank=True, null=True)
+
+    monthly_leaves=  models.CharField(max_length=250, blank=True, null=True)
+
+    leave_applicable_for=  models.CharField(max_length=250, blank=True, null=True)
+
+
+class leaveApplication(models.Model):
+    leave_type  =  models.ForeignKey(MasterLeaveTypes, on_delete=models.CASCADE, blank=True, null=True)
+    reason=  models.CharField(max_length=250, blank=True, null=True)
+    contact_details=  models.CharField(max_length=250, blank=True, null=True)
+    leave_application_file_attachment=  models.CharField(max_length=250, blank=True, null=True)
+    cc_to=  models.CharField(max_length=250, blank=True, null=True)
+    leaveApplication_from_date=  models.CharField(max_length=250, blank=True, null=True)
+    leaveApplication_to_date=  models.CharField(max_length=250, blank=True, null=True)
+    days=  models.CharField(max_length=250, blank=True, null=True)
+    from_session=  models.CharField(max_length=250, blank=True, null=True)
+    to_session=  models.CharField(max_length=250, blank=True, null=True)
+    balance=  models.CharField(max_length=250, blank=True, null=True)
+
+
+
+class Profile(models.Model):
+    first_name =  models.CharField(max_length=250, blank=True, null=True)
+    last_name=  models.CharField(max_length=250, blank=True, null=True)
+    designation=  models.CharField(max_length=250, blank=True, null=True)
+    email_id=  models.CharField(max_length=250, blank=True, null=True)
+    user_address_details=  models.CharField(max_length=250, blank=True, null=True)
+    country=  models.CharField(max_length=250, blank=True, null=True)
+    state=  models.CharField(max_length=250, blank=True, null=True)
+    city=  models.CharField(max_length=250, blank=True, null=True)
+    address=  models.CharField(max_length=250, blank=True, null=True)
+    phone_number=  models.CharField(max_length=250, blank=True, null=True)
+    dob=  models.CharField(max_length=250, blank=True, null=True)
+    tags=  models.CharField(max_length=250, blank=True, null=True)
+    postal_code=  models.CharField(max_length=250, blank=True, null=True)
+    base64 =  models.TextField(max_length=50000, blank=True, null=True)
+    user_profile_photo    =  models.CharField(max_length=250, blank=True, null=True)
+    photo_path = models.CharField(max_length=2000, blank=True, null=True)
+
+
