@@ -70,7 +70,7 @@ class Organization(models.Model):
     org_subscription_plan            = models.CharField(max_length=100, null=True, blank=True)
     org_logo                         = models.CharField(max_length=100, null=True, blank=True)
     org_logo_path                    = models.CharField(max_length=100, null=True, blank=True)
-    base64                              = models.TextField(max_length=50000, null=True, blank=True)   
+    base64                           = models.TextField(max_length=50000, null=True, blank=True)   
     opg_c_timestamp                  = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
     opg_m_timestamp                  = models.DateTimeField(auto_now=True,verbose_name="Last_Update_TimeStamp",blank=True,null=True)
 
@@ -82,12 +82,13 @@ class Organization(models.Model):
 
 class TypeOfIndustries(models.Model):
     org_ref         = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
-    toi_c_date                  = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
-    toi_m_dat                  = models.DateTimeField(auto_now=True,verbose_name="Last_Update_TimeStamp",blank=True,null=True)
+    toi_c_date      = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    toi_m_dat       = models.DateTimeField(auto_now=True,verbose_name="Last_Update_TimeStamp",blank=True,null=True)
     toi_title       = models.CharField(max_length=100, null=True, blank=True)
     toi_description = models.CharField(max_length=100, null=True, blank=True)
     toi_status      = models.CharField(max_length=100, null=True, blank=True)
     toi_type        = models.CharField(max_length=100, null=True, blank=True)
+    
     
 class Clients(models.Model):
     org_ref                     = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
@@ -121,17 +122,12 @@ class ProjectCategories(models.Model):
     pc_status                   =  models.CharField(max_length=250, blank=True, null=True)
     pc_c_date                   =  models.DateTimeField(auto_now_add=True,verbose_name="pc_c_date")
     pc_m_date                   =  models.DateTimeField(auto_now_add=True,verbose_name="pc_m_date")
-
-    
-   
-    base64 =  models.TextField(max_length=250, blank=True, null=True)
-    file_attachment      = models.FileField(upload_to='file_attachment',max_length=250, blank=True, null=True)
-    file_attachment_path = models.CharField(max_length=250, blank=True, null=True)
-
-
-    file_attachment_name=  models.CharField(max_length=250, blank=True, null=True)
-    task_name=  models.CharField(max_length=250, blank=True, null=True)
-    billable_type=  models.CharField(max_length=250, blank=True, null=True)
+    base64 = models.TextField(max_length=250, blank=True, null=True)
+    file_attachment= models.FileField(upload_to='file_attachment',max_length=250, blank=True, null=True)
+    file_attachment_path= models.CharField(max_length=250, blank=True, null=True)
+    file_attachment_name= models.CharField(max_length=250, blank=True, null=True)
+    task_name= models.CharField(max_length=250, blank=True, null=True)
+    billable_type= models.CharField(max_length=250, blank=True, null=True)
     
 
 class Projects(models.Model):
@@ -171,6 +167,7 @@ class TaskProjectCategories(models.Model):
     base64=  models.TextField(max_length=50000, blank=True, null=True)
     task_name=  models.CharField(max_length=250, blank=True, null=True)
     billable_type =  models.CharField(max_length=250, blank=True, null=True)
+    
 
 
 
@@ -240,17 +237,21 @@ class ProjectFiles(models.Model):
     pf_status                   =  models.CharField(max_length=250, blank=True, null=True)
     pf_c_date                   =  models.DateTimeField(auto_now_add=True,verbose_name="pf_c_date")
     pf_m_date                   =  models.DateTimeField(auto_now_add=True,verbose_name="pf_m_date")
-
+#added timestamp
 class GeoZones(models.Model):
     gz_country_code             =  models.CharField(max_length=250, blank=True, null=True)
     gz_zone_name                =  models.CharField(max_length=250, blank=True, null=True)
-
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+#added timestamp
 class GeoTimezones(models.Model):
     gz_ref                      =  models.ForeignKey(GeoZones, on_delete=models.CASCADE, blank=True, null=True)
     gtm_abbreviation            =  models.CharField(max_length=250, blank=True, null=True)
     gtm_time_start              =  models.DateTimeField(auto_now_add=True,verbose_name="gtm_time_start")
     gtm_gmt_offset              =  models.CharField(max_length=250, blank=True, null=True)
     gtm_dst                     =  models.CharField(max_length=250, blank=True, null=True)
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
 
 class GeoCurrencies(models.Model):
     geo_cur_code                =  models.CharField(max_length=250, blank=True, null=True)
@@ -290,10 +291,12 @@ class GeoCities(models.Model):
     gcity_longitude             = models.CharField(max_length=250, blank=True, null=True)
     gcity_c_date                = models.DateTimeField(auto_now_add=True,verbose_name="gcity_c_date")
     gcity_m_date                = models.DateTimeField(auto_now_add=True,verbose_name="gcity_m_date")
-
+#added timestamp
 class GeoCountriesCurrencies(models.Model):
     gcounty_ref   = models.ForeignKey(GeoCountries, on_delete=models.CASCADE, blank=True, null=True) 
     geo_cur_ref   = models.ForeignKey(GeoCurrencies, on_delete=models.CASCADE, blank=True, null=True) 
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
 
 class GeoContinents(models.Model):
     gc_name                 =  models.CharField(max_length=250, blank=True, null=True)
@@ -309,7 +312,7 @@ class GeoSubContinents(models.Model):
 class OrganizationDepartment(models.Model):
     org_ref                 =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
     od_added_by_ref_user    =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
-    od_name                 =  models.CharField(max_length=250, blank=True, null=True)
+    od_name                 =  models.CharField(max_length=250, unique=True, blank=True, null=True)
     od_status               =  models.CharField(max_length=250, blank=True, null=True)
     od_c_date               =  models.DateTimeField(auto_now_add=True,verbose_name="od_c_date")
     od_m_date               =  models.DateTimeField(auto_now_add=True,verbose_name="od_m_date")
@@ -351,7 +354,7 @@ class ClientsOtherContactDetails(models.Model):
 class OrganizationRoles(models.Model):
     org_ref                     =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
     or_added_by_ref_user        =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
-    or_name                     =  models.CharField(max_length=250, blank=True, null=True)
+    or_name                     =  models.CharField(max_length=250, unique=True, blank=True, null=True)
     or_description              =  models.CharField(max_length=250, blank=True, null=True)  
     or_priority                 =  models.CharField(max_length=250, blank=True, null=True)
     or_status                   =  models.CharField(max_length=250, blank=True, null=True)
@@ -362,7 +365,6 @@ class OrganizationRoles(models.Model):
 
     
 #------------------------------------
-
 class ProductDetails(models.Model):
     pd_app_name=  models.CharField(max_length=250, blank=True, null=True)
     pd_app_tag_line=  models.CharField(max_length=250, blank=True, null=True)
@@ -385,7 +387,6 @@ class ProductDetails(models.Model):
 class  OrganizationLeaveType(models.Model):
     org_reff=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
     olt_added_by_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
-
     #do check this id
     olt_ref_occ_id_list=  models.CharField(max_length=250, blank=True, null=True)
     olt_name=  models.CharField(max_length=250, blank=True, null=True)
@@ -453,7 +454,6 @@ class UsersLeaveMaster(models.Model):
     occ_ref=  models.ForeignKey(OrganizationCostCenters, on_delete=models.CASCADE, blank=True, null=True)
     occl_ref=  models.ForeignKey(OrganizationLeaveType, on_delete=models.CASCADE, blank=True, null=True)
     occyl_ref=  models.ForeignKey(OrganizationCostCentersYearList, on_delete=models.CASCADE, blank=True, null=True)
-
     #do check this id
     ulm_added_by_ref_id=  models.CharField(max_length=250, blank=True, null=True)
     ulm_allotted_leaves=  models.CharField(max_length=250, blank=True, null=True)
@@ -462,6 +462,7 @@ class UsersLeaveMaster(models.Model):
     ulm_status=  models.CharField(max_length=250, blank=True, null=True)
     ulm_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulm_c_date")
     ulm_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulm_m_date")
+
 
 class UsersLeaveApplications(models.Model):
 
@@ -488,6 +489,8 @@ class UsersLeaveApplications(models.Model):
     ula_rejected_leaves=  models.CharField(max_length=250, blank=True, null=True)
     ula_pending_leaves=  models.CharField(max_length=250, blank=True, null=True)
     ula_balanced_leaves=  models.CharField(max_length=250, blank=True, null=True)
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
 
 class UserLeaveAllotmentList(models.Model):
 
@@ -504,11 +507,8 @@ class UserLeaveAllotmentList(models.Model):
     ulal_to_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulal_to_date")
     ulal_expiry_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulal_expiry_date")
     ulal_status=  models.CharField(max_length=250, blank=True, null=True)
-
     ulal_type=  models.CharField(max_length=250, blank=True, null=True)
-
     ulal_type_of_allotment=  models.CharField(max_length=250, blank=True, null=True)
-
     ulal_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulal_c_date")
     ulal_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="ulal_m_date")
 
@@ -517,10 +517,8 @@ class UserLeaveList(models.Model):
     ull_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     olt_ref=  models.ForeignKey(OrganizationLeaveType, on_delete=models.CASCADE, blank=True, null=True)
     occ_ref=  models.ForeignKey(OrganizationCostCenters, on_delete=models.CASCADE, blank=True, null=True)
-
     #do check this id
     ull_added_by_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='ull_added_by_ref_user',blank=True, null=True)
-
      #do check this id
     ull_ref_ohcy_id=  models.CharField(max_length=250, blank=True, null=True)
     ull_no_of_allotted_leaves=  models.CharField(max_length=250, blank=True, null=True)
@@ -533,7 +531,6 @@ class  ProjectCategoriesChecklist(models.Model):
     org_ref =  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True,related_name='org_ref')
     pcc_added_by_ref_user =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     pc_ref=  models.ForeignKey(ProjectCategories, on_delete=models.CASCADE, blank=True, null=True,related_name='pc_ref')
-    
     pcc_name=  models.CharField(max_length=250, blank=True, null=True)
     pcc_billable=  models.CharField(max_length=250, blank=True, null=True)
     pcc_status=  models.CharField(max_length=250, blank=True, null=True)
@@ -547,12 +544,11 @@ class TaskProjectCategoriesChecklist(models.Model):
     pc_ref=  models.ForeignKey(ProjectCategories, on_delete=models.CASCADE, blank=True, null=True)
     pcc_ref=  models.ForeignKey(ProjectCategoriesChecklist, on_delete=models.CASCADE, blank=True, null=True)
     opg_ref=  models.ForeignKey(OrgPeopleGroup, on_delete=models.CASCADE, blank=True, null=True)
-    
     tpcc_name=  models.CharField(max_length=250, blank=True, null=True)
     tpcc_status=  models.CharField(max_length=250, blank=True, null=True)
     tpcc_billable=  models.CharField(max_length=250, blank=True, null=True)
-    
-
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
     #do check this id
     tpcc_assignee_people_ref_u_id=  models.CharField(max_length=250, blank=True, null=True)
     tpcc_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="tpcc_c_date")
@@ -561,21 +557,17 @@ class TaskProjectCategoriesChecklist(models.Model):
 
 class TimesheetMaster(models.Model):
     tm_timesheet_date=  models.DateTimeField(auto_now_add=True,verbose_name="tm_timesheet_date")
-
     tm_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='tm_ref_user', blank=True, null=True)
     ula_ref=  models.ForeignKey(UsersLeaveApplications, on_delete=models.CASCADE, blank=True, null=True)
     org_ref=  models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
     tm_approver_ref_user=  models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='tm_approver_ref_user',  blank=True, null=True)
-    
     tm_approved_date=  models.DateTimeField(auto_now_add=True,verbose_name="tm_approved_date")
     tm_status=  models.CharField(max_length=250, blank=True, null=True)
     tm_leave_holiday_conflict=  models.CharField(max_length=250, blank=True, null=True)
     tm_auto_approved=  models.CharField(max_length=250, blank=True, null=True)
     tm_deadline_status=  models.CharField(max_length=250, blank=True, null=True)
     tm_deadline_date=  models.DateTimeField(auto_now_add=True,verbose_name="tm_deadline_date")
-
     tm_c_date=  models.DateTimeField(auto_now_add=True,verbose_name="tm_c_date")
- 
     tm_m_date=  models.DateTimeField(auto_now_add=True,verbose_name="tm_m_date")
 
 class TimesheetMasterDetails(models.Model):
@@ -588,7 +580,6 @@ class TimesheetMasterDetails(models.Model):
     tpcc_ref=  models.ForeignKey(TaskProjectCategoriesChecklist, on_delete=models.CASCADE, blank=True, null=True)
     ula_ref=  models.ForeignKey(UsersLeaveApplications, on_delete=models.CASCADE, blank=True, null=True)
     tmd_approver_ref_user =  models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='tmd_approver_ref_user', blank=True, null=True)
-    
     tmd_timer_status=  models.CharField(max_length=250, blank=True, null=True)
     tmd_start_time=  models.DateTimeField(auto_now_add=True,verbose_name="tmd_start_time")
     tmd_description=  models.CharField(max_length=250, blank=True, null=True)
@@ -608,6 +599,8 @@ class PrefixSuffix(models.Model):
     suffix =  models.CharField(max_length=250, blank=True, null=True)
     prefixsuffix_status =  models.CharField(max_length=250, blank=True, null=True)
     added_date =  models.DateTimeField(auto_now_add=True,verbose_name="added_date")
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
 
 
 class Center(models.Model):
@@ -615,7 +608,8 @@ class Center(models.Model):
     year_start_date=  models.CharField(max_length=250, blank=True, null=True)
     year_end_date=  models.CharField(max_length=250, blank=True, null=True)
     center_status =  models.CharField(max_length=250, blank=True, null=True)
-
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
 
 
 class People(models.Model):
@@ -633,10 +627,11 @@ class People(models.Model):
     tags=  models.CharField(max_length=250, blank=True, null=True)
     date_of_joining=  models.CharField(max_length=250, blank=True, null=True)
     people_status=  models.CharField(max_length=250, blank=True, null=True)
-
     base64 =  models.TextField(max_length=50000, blank=True, null=True)
-    photo    =  models.CharField(max_length=3000, blank=True, null=True)
+    photo =  models.CharField(max_length=3000, blank=True, null=True)
     photo_path = models.CharField(max_length=2000, blank=True, null=True)
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
 
 
 
@@ -644,6 +639,8 @@ class Tag(models.Model):
     tag_name  =  models.CharField(max_length=250, blank=True, null=True)
     added_date =  models.DateTimeField(auto_now_add=True,verbose_name="added_date")
     tage_status   =  models.CharField(max_length=250, blank=True, null=True)
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
 
 
 class TimeSheet(models.Model):
@@ -652,33 +649,27 @@ class TimeSheet(models.Model):
     task=  models.ForeignKey(TaskProjectCategories, on_delete=models.CASCADE, blank=True, null=True)
     time_spent=  models.CharField(max_length=250, blank=True, null=True)
     description=  models.CharField(max_length=250, blank=True, null=True)
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
     timesheet_status=  models.CharField(max_length=250, blank=True, null=True)
     timesheet_date_timestamp=  models.CharField(max_length=250, blank=True, null=True)
 
 class MasterLeaveTypes(models.Model):
-    leave_title=  models.CharField(max_length=250, blank=True, null=True)
-
-    leave_type=  models.CharField(max_length=250, blank=True, null=True)
-
-    no_of_leaves=  models.CharField(max_length=250, blank=True, null=True)
-
-    carry_forward_per=  models.CharField(max_length=250, blank=True, null=True)
-
-    gracefull_days=  models.CharField(max_length=250, blank=True, null=True)
-
-    encashment     = models.BooleanField(default=False, blank=True, null=True)
-    max_encashments=  models.CharField(max_length=250, blank=True, null=True)
-
+    leave_title=models.CharField(max_length=250, blank=True, null=True)
+    leave_type= models.CharField(max_length=250, blank=True, null=True)
+    no_of_leaves=models.CharField(max_length=250, blank=True, null=True)
+    carry_forward_per= models.CharField(max_length=250, blank=True, null=True)
+    gracefull_days=models.CharField(max_length=250, blank=True, null=True)
+    encashment=models.BooleanField(default=False, blank=True, null=True)
+    max_encashments=models.CharField(max_length=250, blank=True, null=True)
     action=  models.CharField(max_length=250, blank=True, null=True)
-
-    description=  models.CharField(max_length=250, blank=True, null=True)
-
-    accrude_monthly   = models.BooleanField(default=False, blank=True, null=True)
-    yearly_leaves=  models.CharField(max_length=250, blank=True, null=True)
-
-    monthly_leaves=  models.CharField(max_length=250, blank=True, null=True)
-
-    leave_applicable_for=  models.CharField(max_length=250, blank=True, null=True)
+    description=models.CharField(max_length=250, blank=True, null=True)
+    accrude_monthly =models.BooleanField(default=False, blank=True, null=True)
+    yearly_leaves=models.CharField(max_length=250, blank=True, null=True)
+    monthly_leaves=models.CharField(max_length=250, blank=True, null=True)
+    leave_applicable_for=models.CharField(max_length=250, blank=True, null=True)
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
 
 
 class leaveApplication(models.Model):
@@ -693,6 +684,8 @@ class leaveApplication(models.Model):
     from_session=  models.CharField(max_length=250, blank=True, null=True)
     to_session=  models.CharField(max_length=250, blank=True, null=True)
     balance=  models.CharField(max_length=250, blank=True, null=True)
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
 
 
 
@@ -703,15 +696,29 @@ class Profile(models.Model):
     email_id=  models.CharField(max_length=250, blank=True, null=True)
     user_address_details=  models.CharField(max_length=250, blank=True, null=True)
     country=  models.CharField(max_length=250, blank=True, null=True)
-    state=  models.CharField(max_length=250, blank=True, null=True)
-    city=  models.CharField(max_length=250, blank=True, null=True)
-    address=  models.CharField(max_length=250, blank=True, null=True)
-    phone_number=  models.CharField(max_length=250, blank=True, null=True)
-    dob=  models.CharField(max_length=250, blank=True, null=True)
-    tags=  models.CharField(max_length=250, blank=True, null=True)
-    postal_code=  models.CharField(max_length=250, blank=True, null=True)
-    base64 =  models.TextField(max_length=50000, blank=True, null=True)
-    user_profile_photo    =  models.CharField(max_length=250, blank=True, null=True)
-    photo_path = models.CharField(max_length=2000, blank=True, null=True)
+    state= models.CharField(max_length=250, blank=True, null=True)
+    city= models.CharField(max_length=250, blank=True, null=True)
+    address=models.CharField(max_length=250, blank=True, null=True)
+    phone_number= models.CharField(max_length=250, blank=True, null=True)
+    dob= models.CharField(max_length=250, blank=True, null=True)
+    tags=models.CharField(max_length=250, blank=True, null=True)
+    postal_code=models.CharField(max_length=250, blank=True, null=True)
+    base64 = models.TextField(max_length=50000, blank=True, null=True)
+    user_profile_photo= models.CharField(max_length=250, blank=True, null=True)
+    photo_path= models.CharField(max_length=2000, blank=True, null=True)
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
 
-
+ 
+class SubscriptionPlan(models.Model):
+    plan = models.CharField(max_length=250, blank=True, null=True)
+    type= models.CharField(max_length=250, blank=True, null=True)
+    no_of_subscribers = models.CharField(max_length=250, blank=True, null=True)
+    amt_per_user = models.CharField(max_length=250, blank=True, null =True)
+    total_amount = models.IntegerField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null =True)
+    days_left = models.DateField(blank=True, null =True)
+    reg_users = models.CharField(max_length=250, blank=True, null=True)
+    c_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)
+    m_timestamp = models.DateTimeField(auto_now_add=True,verbose_name="Create_TimeStamp",blank=True,null=True)

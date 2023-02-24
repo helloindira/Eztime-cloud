@@ -232,6 +232,7 @@ class ChangePassword(GenericAPIView):
 class OrganizationApiView(APIView):
     def get(self,request):
         id = request.query_params.get('id')
+
         if id:
             try:
                 all_data = Organization.objects.filter(id=id).values()
@@ -300,9 +301,6 @@ class OrganizationApiView(APIView):
         if page_number:
             selected_page_no = int(page_number)
 
-
-
-       
         try:
             
             check_data = Organization.objects.create(
@@ -512,6 +510,22 @@ class OrganizationApiView(APIView):
 
 
 # @method_decorator([AutorizationRequired], name='dispatch')
+# class TypeOfIndustriesApiView(APIView):
+#     def get(self,request):
+        
+#         id = request.query_params.get('id')
+#         if id:
+#             try:
+#                 all_data = TypeOfIndustries.objects.filter(id=id).values()
+#                 return Response({'result':{'status':'GET by Id','data':all_data}})
+#             except Organization.DoesNotExist:
+#                 return Response({
+#                 'error':{'message':'Id does not exists!',
+#                 'status_code':status.HTTP_404_NOT_FOUND,
+#                 }},status=status.HTTP_404_NOT_FOUND)
+#         else:
+#             all_data = TypeOfIndustries.objects.all().values()
+#             return Response({'result':{'status':'GET','data':all_data}})
 class TypeOfIndustriesApiView(APIView):
     def get(self,request):
         
@@ -527,7 +541,27 @@ class TypeOfIndustriesApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = TypeOfIndustries.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts = TypeOfIndustries.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
 
     def post(self,request):
         
@@ -635,7 +669,28 @@ class ClientsApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = Clients.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =Clients.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            
 
     def post(self,request):
         
@@ -759,7 +814,6 @@ class ClientsApiView(APIView):
 # @method_decorator([AutorizationRequired], name='dispatch')
 class OrgPeopleGroupView(APIView):
     def get(self,request):
-        
         id = request.query_params.get('id')
         if id:
             try:
@@ -772,7 +826,27 @@ class OrgPeopleGroupView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = OrgPeopleGroup.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =OrgPeopleGroup.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
 
     def post(self,request):
         
@@ -875,47 +949,64 @@ class OrganizationDepartmentView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = OrganizationDepartment.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =OrganizationDepartment.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+
 
     def post(self,request):
-        
         data = request.data
         org_ref                 = data.get('org_ref_id')
         od_added_by_ref_user    = data.get('od_added_by_ref_user_id')
         od_name                 = data.get('od_name')
         od_status               = data.get('od_status')
-        
-
         selected_page_no =1 
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-        
-        try:
-            OrganizationDepartment.objects.create(org_ref_id=org_ref,
+        if OrganizationDepartment.objects.filter(od_name=od_name).exists:
+            return Response({'Error':{'Message':'Department have Already Exist'}},status=status.HTTP_400_BAD_REQUEST)
+        else:
+            try:
+                OrganizationDepartment.objects.create(org_ref_id=org_ref,
                                                 od_added_by_ref_user_id=od_added_by_ref_user,
                                                 od_name=od_name,
                                                 od_status=od_status)
 
-            posts = OrganizationDepartment.objects.all().values()
-            paginator = Paginator(posts,10)
-            try:
-                page_obj = paginator.get_page(selected_page_no)
-            except PageNotAnInteger:
-                page_obj = paginator.page(1)
-            except EmptyPage:
-                page_obj = paginator.page(paginator.num_pages)
-            return Response({'result':{'status':'Created','data':list(page_obj)}})
-        except IntegrityError as e:
-            error_message = e.args
-            return Response({
-            'error':{'message':'DB error!',
-            'detail':error_message,
-            'status_code':status.HTTP_400_BAD_REQUEST,
-            }},status=status.HTTP_400_BAD_REQUEST)
+                posts = OrganizationDepartment.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
             
 
     def put(self,request,pk):
@@ -976,7 +1067,28 @@ class ClientsDMS(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = ClientsDms.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =ClientsDms.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            
 
     def post(self,request):
         
@@ -1091,7 +1203,29 @@ class OrganizationCostCentersView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = OrganizationCostCenters.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =OrganizationCostCenters.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = OrganizationCostCenters.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         
@@ -1197,7 +1331,28 @@ class ClientsOtherContactDetailsView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = ClientsOtherContactDetails.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =ClientsOtherContactDetails.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            
 
     def post(self,request):
         
@@ -1309,10 +1464,32 @@ class OrganizationRolesView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = OrganizationRoles.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =OrganizationRoles.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = OrganizationRoles.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
-        
+
         data = request.data
         org_ref = data.get('org_ref_id')
         or_added_by_ref_user= data.get('or_added_by_ref_user_id')
@@ -1322,19 +1499,15 @@ class OrganizationRolesView(APIView):
         or_status= data.get('or_status')
         or_type= data.get('or_type')
         or_permission= data.get('or_permission')
-
-        
-
         selected_page_no =1 
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-        
-        try:
-            OrganizationRoles.objects.create(org_ref_id=org_ref,
+        if OrganizationRoles.objects.filter(or_name=or_name).exists():
+                return Response({'Error':{'Message':'Role Name have Already Exist'}},status=status.HTTP_400_BAD_REQUEST)
+        else:
+            try:
+                OrganizationRoles.objects.create(org_ref_id=org_ref,
                                             or_added_by_ref_user_id=or_added_by_ref_user,
                                             or_name=or_name,
                                             or_description=or_description,
@@ -1343,25 +1516,24 @@ class OrganizationRolesView(APIView):
                                             or_type=or_type,
                                             or_permission=or_permission)
 
-            posts = OrganizationRoles.objects.all().values()
-            paginator = Paginator(posts,10)
-            try:
-                page_obj = paginator.get_page(selected_page_no)
-            except PageNotAnInteger:
-                page_obj = paginator.page(1)
-            except EmptyPage:
-                page_obj = paginator.page(paginator.num_pages)
-            return Response({'result':{'status':'Created','data':list(page_obj)}})
-        except IntegrityError as e:
-            error_message = e.args
-            return Response({
-            'error':{'message':'DB error!',
-            'detail':error_message,
-            'status_code':status.HTTP_400_BAD_REQUEST,
-            }},status=status.HTTP_400_BAD_REQUEST)
+                posts = OrganizationRoles.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
 
     def put(self,request,pk):
-        
         data = request.data
         org_ref = data.get('org_ref_id')
         or_added_by_ref_user= data.get('or_added_by_ref_user_id')
@@ -1426,7 +1598,29 @@ class ProjectsAPIView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = Projects.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =Projects.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = Projects.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         
@@ -1606,7 +1800,30 @@ class TaskProjectCategoriesApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = TaskProjectCategories.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =TaskProjectCategories.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+
+            # all_data = TaskProjectCategories.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         
@@ -1826,7 +2043,29 @@ class ProjectCategoriesFilesTemplatesApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = ProjectCategoriesFilesTemplates.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =ProjectCategoriesFilesTemplates.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = ProjectCategoriesFilesTemplates.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         
@@ -1942,7 +2181,29 @@ class ProjectStatusMainCategoryApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             all_data = ProjectStatusMainCategory.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =ProjectStatusMainCategory.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = ProjectStatusMainCategory.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         
@@ -2034,7 +2295,6 @@ class ProjectStatusMainCategoryApiView(APIView):
 # @method_decorator([AutorizationRequired], name='dispatch')
 class ProjectHistoryApiView(APIView):
     def get(self,request):
-        
         id = request.query_params.get('id')
         if id:
             all_data = ProjectHistory.objects.filter(id=id).values()
@@ -2043,12 +2303,31 @@ class ProjectHistoryApiView(APIView):
                 'error':{'message':'Record not found!',
                 'status_code':status.HTTP_404_NOT_FOUND,
                 }},status=status.HTTP_404_NOT_FOUND)
-
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = ProjectHistory.objects.all().values()
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =ProjectHistory.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = ProjectHistory.objects.all().values()
             return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
@@ -2210,13 +2489,32 @@ class ProjectStatusSubCategoryApiView(APIView):
                 'error':{'message':'Record not found!',
                 'status_code':status.HTTP_404_NOT_FOUND,
                 }},status=status.HTTP_404_NOT_FOUND)
-
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = ProjectStatusSubCategory.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =ProjectStatusSubCategory.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = ProjectStatusSubCategory.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -2227,29 +2525,17 @@ class ProjectStatusSubCategoryApiView(APIView):
         pssc_name                    =data.get('pssc_name')                
         pssc_status                  =data.get('pssc_status')  
         color = data.get('color')
-
-
-        
-        
-
-        
         selected_page_no =1 
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-        
         try:
             ProjectStatusSubCategory.objects.create(psmc_ref_id=psmc_ref,
                                                     org_ref_id=org_ref,
                                                     pssc_added_by_ref_user_id=pssc_added_by_ref_user,
                                                     pssc_name=pssc_name,
                                                     pssc_status=pssc_status,
-                                                    color=color
-                                            )
-
+                                                    color=color)
 
             posts = ProjectStatusSubCategory.objects.all().values()
             paginator = Paginator(posts,10)
@@ -2277,9 +2563,6 @@ class ProjectStatusSubCategoryApiView(APIView):
         pssc_name                    =data.get('pssc_name')                
         pssc_status                  =data.get('pssc_status')  
         color= data.get('color')
-        
-        
-        
         try:
             ProjectStatusSubCategory.objects.filter(id=pk).update(psmc_ref=psmc_ref,
                                                     org_ref_id=org_ref,
@@ -2324,13 +2607,32 @@ class ProjectFilesApiView(APIView):
                 'error':{'message':'Record not found!',
                 'status_code':status.HTTP_404_NOT_FOUND,
                 }},status=status.HTTP_404_NOT_FOUND)
-
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = ProjectFiles.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =ProjectFiles.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = ProjectFiles.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -2342,15 +2644,10 @@ class ProjectFilesApiView(APIView):
         pf_file_path                =data.get('pf_file_path')  
         pf_base_url                 =data.get('pf_base_url')    
         pf_status                   =data.get('pf_status')    
-
-        
-     
         selected_page_no =1 
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
         try:
             ProjectFiles.objects.create(org_ref_id=org_ref,
                                         pf_added_ref_user_id=pf_added_ref_user,
@@ -2360,8 +2657,6 @@ class ProjectFilesApiView(APIView):
                                         pf_base_url=pf_base_url,
                                         pf_status=pf_status
                                 )
-
-
             posts = ProjectFiles.objects.all().values()
             paginator = Paginator(posts,10)
             try:
@@ -2439,11 +2734,31 @@ class GeoZonesApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
 
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = GeoZones.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =GeoZones.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = GeoZones.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -2454,15 +2769,9 @@ class GeoZonesApiView(APIView):
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-        
         try:
             GeoZones.objects.create(gz_country_code=gz_country_code,
                                     gz_zone_name=gz_zone_name)
-
-
             posts = GeoZones.objects.all().values()
             paginator = Paginator(posts,10)
             try:
@@ -2479,8 +2788,6 @@ class GeoZonesApiView(APIView):
             'detail':error_message,
             'status_code':status.HTTP_400_BAD_REQUEST,
             }},status=status.HTTP_400_BAD_REQUEST)
-            
-
     def put(self,request,pk):
         data = request.data
         gz_country_code        =data.get('gz_country_code') 
@@ -2499,8 +2806,6 @@ class GeoZonesApiView(APIView):
             'detail':error_message,
             'status_code':status.HTTP_400_BAD_REQUEST,
             }},status=status.HTTP_400_BAD_REQUEST)
-                
-
     def delete(self,request,pk):
         test = (0,{})
             
@@ -2513,7 +2818,6 @@ class GeoZonesApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({'result':{'status':'deleted'}})
-
 
 # @method_decorator([AutorizationRequired], name='dispatch')
 class GeoTimezonesApiView(APIView):
@@ -2528,11 +2832,32 @@ class GeoTimezonesApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
 
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = GeoTimezones.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =GeoTimezones.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+
+            # all_data = GeoTimezones.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -2626,13 +2951,32 @@ class GeoCurrenciesApiView(APIView):
                 'error':{'message':'Record not found!',
                 'status_code':status.HTTP_404_NOT_FOUND,
                 }},status=status.HTTP_404_NOT_FOUND)
-
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = GeoCurrencies.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =GeoCurrencies.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = GeoCurrencies.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -2643,18 +2987,10 @@ class GeoCurrenciesApiView(APIView):
         geo_cur_minor_name  = data.get('geo_cur_minor_name')
         geo_cur_minor_symbol= data.get('geo_cur_minor_symbol')
         geo_cur_minor_value = data.get('geo_cur_minor_value')
-
-
-    
-        
         selected_page_no =1 
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-        
         try:
             GeoCurrencies.objects.create(geo_cur_code=geo_cur_code,
                                         geo_cur_name=geo_cur_name,
@@ -2664,8 +3000,6 @@ class GeoCurrenciesApiView(APIView):
                                         geo_cur_minor_symbol=geo_cur_minor_symbol,
                                         geo_cur_minor_value=geo_cur_minor_value
                                 )
-
-
             posts = GeoCurrencies.objects.all().values()
             paginator = Paginator(posts,10)
             try:
@@ -2693,10 +3027,6 @@ class GeoCurrenciesApiView(APIView):
         geo_cur_minor_name  = data.get('geo_cur_minor_name')
         geo_cur_minor_symbol= data.get('geo_cur_minor_symbol')
         geo_cur_minor_value = data.get('geo_cur_minor_value')
-          
-        
-        
-        
         try:
             GeoCurrencies.objects.filter(id=pk).update(geo_cur_code=geo_cur_code,
                                         geo_cur_name=geo_cur_name,
@@ -2706,8 +3036,6 @@ class GeoCurrenciesApiView(APIView):
                                         geo_cur_minor_symbol=geo_cur_minor_symbol,
                                         geo_cur_minor_value=geo_cur_minor_value
                                     )
-
-
             return Response({'result':{'status':'Updated'}})
         except IntegrityError as e:
             error_message = e.args
@@ -2744,11 +3072,31 @@ class GeoCountriesApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
 
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = GeoCountries.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =GeoCountries.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = GeoCountries.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -2757,17 +3105,10 @@ class GeoCountriesApiView(APIView):
         gcounty_cca3    = data.get('gcounty_cca3')
         gcounty_ccn3    = data.get('gcounty_ccn3')
         gcounty_status  = data.get('gcounty_status')
-
-         
-        
         selected_page_no =1 
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-        
         try:
             GeoCountries.objects.create(gcounty_name=gcounty_name,
                                         gcounty_cca2=gcounty_cca2,
@@ -2775,8 +3116,6 @@ class GeoCountriesApiView(APIView):
                                         gcounty_ccn3=gcounty_ccn3,
                                         gcounty_status=gcounty_status
                                 )
-
-
             posts = GeoCountries.objects.all().values()
             paginator = Paginator(posts,10)
             try:
@@ -2794,6 +3133,7 @@ class GeoCountriesApiView(APIView):
             'status_code':status.HTTP_400_BAD_REQUEST,
             }},status=status.HTTP_400_BAD_REQUEST)
 
+
     def put(self,request,pk):
         data = request.data
         gcounty_name    = data.get('gcounty_name')
@@ -2801,10 +3141,6 @@ class GeoCountriesApiView(APIView):
         gcounty_cca3    = data.get('gcounty_cca3')
         gcounty_ccn3    = data.get('gcounty_ccn3')
         gcounty_status  = data.get('gcounty_status')
-               
-        
-        
-        
         try:
             GeoCountries.objects.filter(id=pk).update(gcounty_name=gcounty_name,
                                                         gcounty_cca2=gcounty_cca2,
@@ -2812,8 +3148,6 @@ class GeoCountriesApiView(APIView):
                                                         gcounty_ccn3=gcounty_ccn3,
                                                         gcounty_status=gcounty_status
                                                     )
-
-
             return Response({'result':{'status':'Updated'}})
         except IntegrityError as e:
             error_message = e.args
@@ -2850,11 +3184,31 @@ class GeoStatesApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
 
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = GeoStates.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =GeoStates.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = GeoStates.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -2868,17 +3222,11 @@ class GeoStatesApiView(APIView):
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-       
         try:
             GeoStates.objects.create(gstate_name=gstate_name,
                                     gcountry_ref_id=gcountry_ref,
                                     gstate_hasc=gstate_hasc
                                 )
-
-
             posts = GeoStates.objects.all().values()
             paginator = Paginator(posts,10)
             try:
@@ -2952,11 +3300,31 @@ class GeoCitiesApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
 
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = GeoCities.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =GeoCities.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = GeoCities.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -2966,17 +3334,10 @@ class GeoCitiesApiView(APIView):
         gcity_name      =data.get('gcity_name')
         gcity_latitude  =data.get('gcity_latitude')
         gcity_longitude =data.get('gcity_longitude')
-      
-         
-        
         selected_page_no =1 
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-        
         try:
             GeoCities.objects.create(
                                     ref_gcounty_id=ref_gcounty,
@@ -2986,8 +3347,6 @@ class GeoCitiesApiView(APIView):
                                     gcity_latitude=gcity_latitude,
                                     gcity_longitude=gcity_longitude
                                 )
-
-
             posts = GeoCities.objects.all().values()
             paginator = Paginator(posts,10)
             try:
@@ -3013,10 +3372,6 @@ class GeoCitiesApiView(APIView):
         gcity_name      =data.get('gcity_name')
         gcity_latitude  =data.get('gcity_latitude')
         gcity_longitude =data.get('gcity_longitude')
-            
-        
-        
-        
         try:
             GeoCities.objects.filter(id=pk).update(ref_gcounty_id=ref_gcounty,
                                                     gstate_ref_id=gstate_ref,
@@ -3025,8 +3380,6 @@ class GeoCitiesApiView(APIView):
                                                     gcity_latitude=gcity_latitude,
                                                     gcity_longitude=gcity_longitude
                                                 )
-
-
             return Response({'result':{'status':'Updated'}})
         except IntegrityError as e:
             error_message = e.args
@@ -3038,7 +3391,6 @@ class GeoCitiesApiView(APIView):
 
     def delete(self,request,pk):
         test = (0,{})
-            
         all_values = GeoCities.objects.filter(id=pk).delete()
         if test == all_values:
 
@@ -3065,11 +3417,31 @@ class GeoCountriesCurrenciesApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
 
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = GeoCountriesCurrencies.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =GeoCountriesCurrencies.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = GeoCountriesCurrencies.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -3149,11 +3521,32 @@ class GeoContinentsApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
 
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = GeoContinents.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =GeoContinents.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+
+            # all_data = GeoContinents.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -3165,14 +3558,9 @@ class GeoContinentsApiView(APIView):
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-        
         try:
             GeoContinents.objects.create(gc_name =gc_name
                                         )
-
 
             posts = GeoContinents.objects.all().values()
             paginator = Paginator(posts,10)
@@ -3194,14 +3582,9 @@ class GeoContinentsApiView(APIView):
     def put(self,request,pk):
         data = request.data
         gc_name      = data.get('gc_name')
-
-        
-        
         try:
             GeoContinents.objects.filter(id=pk).update(gc_name =gc_name
                                                             )
-
-
             return Response({'result':{'status':'Updated'}})
         except IntegrityError as e:
             error_message = e.args
@@ -3238,33 +3621,45 @@ class GeoSubContinentsApiView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
 
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = GeoSubContinents.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =GeoSubContinents.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+
+            # all_data = GeoSubContinents.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
     def post(self,request):
         data = request.data
         gc_ref      = data.get('gc_ref_id')
         gsc_name    = data.get('gsc_name')
-
-        
-        
         selected_page_no =1 
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-        
         try:
             GeoSubContinents.objects.create(
                                             gc_ref_id=gc_ref,
                                             gsc_name=gsc_name
                                         )
-
-
             posts = GeoSubContinents.objects.all().values()
             paginator = Paginator(posts,10)
             try:
@@ -3286,15 +3681,10 @@ class GeoSubContinentsApiView(APIView):
         data = request.data
         gc_ref      = data.get('gc_ref_id')
         gsc_name    = data.get('gsc_name')
-
-        
-        
         try:
             GeoSubContinents.objects.filter(id=pk).update(gc_ref_id=gc_ref,
                                                             gsc_name=gsc_name
                                                         )
-
-
             return Response({'result':{'status':'Updated'}})
         except IntegrityError as e:
             error_message = e.args
@@ -3330,11 +3720,31 @@ class ProjectCategoriesView(APIView):
                 }},status=status.HTTP_404_NOT_FOUND)
 
             return Response({'result':{'status':'GET by Id','data':all_data}})
-
-
         else:
             all_data = ProjectCategories.objects.all().values()
-            return Response({'result':{'status':'GET','data':all_data}})
+            selected_page_no =1 
+            page_number = request.GET.get('page')
+            if page_number:
+                selected_page_no = int(page_number)
+            try:
+                posts =ProjectCategories.objects.all().values()
+                paginator = Paginator(posts,10)
+                try:
+                    page_obj = paginator.get_page(selected_page_no)
+                except PageNotAnInteger:
+                    page_obj = paginator.page(1)
+                except EmptyPage:
+                    page_obj = paginator.page(paginator.num_pages)
+                return Response({'result':{'status':'Created','data':list(page_obj)}})
+            except IntegrityError as e:
+                error_message = e.args
+                return Response({
+                'error':{'message':'DB error!',
+                'detail':error_message,
+                'status_code':status.HTTP_400_BAD_REQUEST,
+                }},status=status.HTTP_400_BAD_REQUEST)
+            # all_data = ProjectCategories.objects.all().values()
+            # return Response({'result':{'status':'GET','data':all_data}})
 
     def post(self,request):
         data = request.data
@@ -3378,9 +3788,6 @@ class ProjectCategoriesView(APIView):
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
         try:
             check_data = ProjectCategories.objects.create(org_ref_id=org_ref,
                                             pc_added_by_ref_user_id=pc_added_by_ref_user,
@@ -3454,10 +3861,6 @@ class ProjectCategoriesView(APIView):
                                                 # file_attachment_name=file_attachment_name,
                                                 task_name=task_name,
                                                 billable_type=billable_type,)
-                
-                
-                    
-
                 return Response({'result':{'status':'Updated'}})
             except IntegrityError as e:
                 error_message = e.args
@@ -3466,8 +3869,6 @@ class ProjectCategoriesView(APIView):
                 'detail':error_message,
                 'status_code':status.HTTP_400_BAD_REQUEST,
                 }},status=status.HTTP_400_BAD_REQUEST)
-
-
         try:
 
             base64_data = file_attachment
@@ -3485,15 +3886,10 @@ class ProjectCategoriesView(APIView):
             print(ss)
             ss.write(imgdata1)
             ss.close()   
-
-
-
-                
             ProjectCategories.objects.filter(id=pk).update(
                    
                                                 file_attachment='',
                                                 )
-
             ProjectCategories.objects.filter(id=pk).update(
                     org_ref_id=org_ref,
                                                 pc_added_by_ref_user_id=pc_added_by_ref_user,
@@ -3512,8 +3908,6 @@ class ProjectCategoriesView(APIView):
                     check_data.file_attachment_path = 'https://eztime.thestorywallcafe.com/media/file_attachment/'+ (str(check_data.file_attachment))
                     
                     check_data.save()
-                    
-
             return Response({'result':{'status':'Updated'}})
         except IntegrityError as e:
                 error_message = e.args
@@ -4131,10 +4525,6 @@ class UsersLeaveMasterApiView(APIView):
         page_number = request.GET.get('page')
         if page_number:
             selected_page_no = int(page_number)
-
-
-
-       
         try:
             UsersLeaveMaster.objects.create(org_ref_id=org_ref,
                                                                         ulm_ref_user_id=ulm_ref_user,
@@ -6526,18 +6916,82 @@ class DashBoardview(APIView):
 
 
 
+class SubscriptionPlanAPIView(APIView):
+    def get(self,request):
+        id = request.query_params.get('id')
+        if id:
+            try:
+                sub_data = SubscriptionPlan.objects.filter(id=id).values()
+                return Response({'result':'Get_by_id','status':'HTTP_200_OK','data':sub_data})
+            except SubscriptionPlan.DoesNotExist:
+                return Response({
+                'error':{'message':'Id does not exists!',
+                'status_code':status.HTTP_404_NOT_FOUND,}},status=status.HTTP_404_NOT_FOUND)
+        else:
+            all_data = SubscriptionPlan.objects.all().values()
+            return Response({'result':'All data','status':'HTTP_200_OK','data':all_data})
+        
+
+    def post(self,request):
+        data = request.data
+        plan = data.get('plan')
+        type = data.get('type')
+        no_of_subscribers = data.get('no_of_subscribers')
+        amt_per_user = data.get('amt_per_user')
+        total_amount = data.get('total_amount')
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+        selected_page_no =1 
+        page_number = request.GET.get('page')
+        if page_number:
+            selected_page_no = int(page_number)
+        subscription=SubscriptionPlan.objects.create(
+                                    plan = plan,
+                                    type = type,
+                                    no_of_subscribers = no_of_subscribers,
+                                    amt_per_user = amt_per_user,
+                                    total_amount = total_amount,
+                                    start_date = start_date,
+                                    end_date = end_date,
+                                    )
+        response_result = {
+                    'result':{'data':'Data added sucessfully',
+                    'form_id':subscription.id,
+                    'status':'HTTP_200_OK'
+                    }}
+        return Response(response_result,status= status.HTTP_201_CREATED)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    def put(self,request):
+        data = request.data
+        id = data.get('id')
+        if id:
+            data = SubscriptionPlan.objects.filter(id=id).update(
+                            plan = data.get('plan'),
+                            type = data.get('type'),
+                            no_of_subscribers = data.get('no_of_subscribers'),
+                            amt_per_user = data.get('amt_per_user'),
+                            total_amount = data.get('total_amount'),
+                            start_date = data.get('start_date'),
+                            end_date = data.get('end_date')
+            )
+            if data:
+                    return JsonResponse({'message': 'data Updated Sucessfully.'})
+            else:
+                response={'message':"Invalid id"}
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return JsonResponse({'message': 'Id. Required'},status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self,request):
+        id=self.request.query_params.get('id')
+        subscription = SubscriptionPlan.objects.filter(id=id)
+        if len(subscription) > 0:
+            subscription.delete()
+            return Response({'message':'data Deleted Sucessfully'})
+        else:
+            return Response({'error':{'message':'Record not found!',
+                'status_code':status.HTTP_404_NOT_FOUND,
+                }},status=status.HTTP_404_NOT_FOUND)
+    

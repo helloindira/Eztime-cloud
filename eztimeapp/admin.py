@@ -33,6 +33,9 @@ model_list = [
     ClientsDms,
     ClientsOtherContactDetails,
     OrganizationRoles,
+    SubscriptionPlan,
+    
+
 ]    
 admin.site.register(model_list)   
 

@@ -184,6 +184,10 @@ urlpatterns = [
 
     path('dash-board', DashBoardview.as_view()),
     
+    path('subscriptionplan', SubscriptionPlanAPIView.as_view()),
+    path('subscription_lan/<int:pk>', SubscriptionPlanAPIView.as_view()), 
+
+    
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
