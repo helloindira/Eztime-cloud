@@ -1292,6 +1292,7 @@ class ClientsOtherContactDetailsView(APIView):
         else:
             return Response({'result':{'status':'deleted'}})
 
+
 # @method_decorator([AutorizationRequired], name='dispatch')
 class OrganizationRolesView(APIView):
     def get(self,request):
@@ -1328,8 +1329,8 @@ class OrganizationRolesView(APIView):
                 'detail':error_message,
                 'status_code':status.HTTP_400_BAD_REQUEST,
                 }},status=status.HTTP_400_BAD_REQUEST)
-            # all_data = OrganizationRoles.objects.all().values()
-            # return Response({'result':{'status':'GET','data':all_data}})
+            
+
 
     def post(self,request):
         data = request.data
@@ -1373,6 +1374,7 @@ class OrganizationRolesView(APIView):
                 'detail':error_message,
                 'status_code':status.HTTP_400_BAD_REQUEST,
                 }},status=status.HTTP_400_BAD_REQUEST)
+
 
     def put(self,request,pk):
         data = request.data
